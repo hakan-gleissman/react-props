@@ -1,6 +1,7 @@
 import Section from "./components/Section";
 import Article from "./components/Article";
 import type { ArticleType } from "./types/Article";
+import ArticleForm from "./components/ArticleForm";
 
 const articles: ArticleType[] = [
   {
@@ -27,6 +28,9 @@ const blogs: ArticleType[] = articles.filter(
 const App = () => {
   return (
     <main>
+      <section>
+        <ArticleForm></ArticleForm>
+      </section>
       <Section title="Nyheter">
         {news.map((news) => (
           <Article
