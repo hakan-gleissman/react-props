@@ -1,14 +1,26 @@
 import { useState } from "react";
+import type { ArticleCategory, NewArticle } from "../types/Article";
 
-const ArticleForm = () => {
+type ArticleFormProps = {
+  onAddArticle: (article: NewArticle) => void;
+};
+
+const ArticleForm = ({ onAddArticle }: ArticleFormProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Nyheter");
 
   const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    let categoryTemp: ArticleCategory = "news";
+    if (category === "blog") {
+      categoryTemp = "blog";
+    }
 
-    console.log("Submitting: " + category);
+    onAddArticle({ title, description, category: categoryTemp });
+    setTitle("");
+    setDescription("");
+    setCategory("Nyheter");
   };
 
   return (
@@ -39,8 +51,8 @@ const ArticleForm = () => {
           value={category}
           onChange={(event) => setCategory(event.target.value)}
         >
-          <option value="Nyhet">Nyhet</option>
-          <option value="Blogg">Blogg</option>
+          <option value="news">Nyhet</option>
+          <option value="blog">Blogg</option>
         </select>
         <button type="submit">Spara artikel</button>
       </form>

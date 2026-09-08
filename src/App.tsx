@@ -1,9 +1,10 @@
 import Section from "./components/Section";
 import Article from "./components/Article";
-import type { ArticleType } from "./types/Article";
+import type { ArticleType, NewArticle } from "./types/Article";
 import ArticleForm from "./components/ArticleForm";
+import { useState } from "react";
 
-const articles: ArticleType[] = [
+const articlesList: ArticleType[] = [
   {
     id: 1,
     title: "Första nyheten",
@@ -18,18 +19,29 @@ const articles: ArticleType[] = [
   },
 ];
 
-const news: ArticleType[] = articles.filter(
-  (article) => article.category === "news",
-);
-const blogs: ArticleType[] = articles.filter(
-  (article) => article.category === "blog",
-);
-
 const App = () => {
+  const [articleId, setArticleId] = useState(3);
+  const [articles, setArticles] = useState<ArticleType[]>(articlesList);
+
+  const news: ArticleType[] = articles.filter(
+    (article) => article.category === "news",
+  );
+  const blogs: ArticleType[] = articles.filter(
+    (article) => article.category === "blog",
+  );
+
+  const addArticle = (newArticle: NewArticle) => {
+    const article: ArticleType = {
+      id: articleId,
+      ...newArticle,
+    };
+    setArticleId(articleId + 1);
+    setArticles([...articles, article]);
+  };
   return (
     <main>
       <section>
-        <ArticleForm></ArticleForm>
+        <ArticleForm onAddArticle={addArticle}></ArticleForm>
       </section>
       <Section title="Nyheter">
         {news.map((news) => (
