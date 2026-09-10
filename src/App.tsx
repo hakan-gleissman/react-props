@@ -1,35 +1,14 @@
-import Section from "./components/Section";
-import Article from "./components/Article";
 import type { ArticleType, NewArticle } from "./types/Article";
-import ArticleForm from "./components/ArticleForm";
+
 import { useEffect, useState } from "react";
-// const articlesList: ArticleType[] = [
-//   {
-//     id: 1,
-//     title: "Artikel här",
-//     description: "Beskrivning",
-//     category: "news",
-//   },
-//   {
-//     id: 2,
-//     title: "Blogg här",
-//     description: "Beskrivning",
-//     category: "blog",
-//   },
-// ];
+import { Link, Route, Routes } from "react-router";
+import ArticlePage from "./pages/ArticlePage";
+import CreateArticlePage from "./pages/CreateArticlePage";
 
 const apiUrl = "http://localhost:3005/api/articles";
 
 const App = () => {
-  const [articleId, setArticleId] = useState(3);
   const [articles, setArticles] = useState<ArticleType[]>([]);
-
-  const news: ArticleType[] = articles.filter(
-    (article) => article.category === "news",
-  );
-  const blogs: ArticleType[] = articles.filter(
-    (article) => article.category === "blog",
-  );
 
   const fetchArticles = async () => {
     try {
@@ -68,29 +47,26 @@ const App = () => {
     await fetchArticles();
   };
   return (
-    <main>
-      <section>
-        <ArticleForm onAddArticle={addArticle}></ArticleForm>
-      </section>
-      <Section title="Nyheter">
-        {news.map((news) => (
-          <Article
-            key={news.id}
-            title={news.title}
-            description={news.description}
-          ></Article>
-        ))}
-      </Section>
-      <Section title="Bloggar">
-        {blogs.map((news) => (
-          <Article
-            key={news.id}
-            title={news.title}
-            description={news.description}
-          ></Article>
-        ))}
-      </Section>
-    </main>
+    <>
+      <header>
+        <nav>
+          <Link to="/">Artiklar</Link>
+          <Link to="/create">Skapa artikel</Link>
+        </nav>
+      </header>
+      <Routes>
+        <Route
+          path="/"
+          element={<ArticlePage articles={articles}></ArticlePage>}
+        ></Route>
+        <Route
+          path="/create"
+          element={
+            <CreateArticlePage onAddArticle={addArticle}></CreateArticlePage>
+          }
+        ></Route>
+      </Routes>
+    </>
   );
 };
 export default App;
